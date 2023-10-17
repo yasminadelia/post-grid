@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { XIcon } from "./icons";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const ModalAddPost = ({ show, setShow }) => {
   const [dataPost, setDataPost] = useState({
@@ -15,18 +17,25 @@ const ModalAddPost = ({ show, setShow }) => {
       body: "",
     });
   };
+
+  const handleClose = () => {
+    setShow(false);
+    clearForm();
+  };
+
   const handleAddPost = () => {
-    fetch(`https://jsonplaceholder.typicode.com/posts`, {
-      method: "POST",
-      headers: {
-        "Content-type": "text/plain",
-      },
-      body: JSON.stringify(dataPost),
-    })
-      .then((res) => res.json())
+    axios
+      .post(`https://jsonplaceholder.typicode.com/posts`, dataPost)
       .then((response) => {
-        alert(response);
-        console.log({ response });
+        console.log(response);
+
+        handleClose();
+        Swal.fire({
+          icon: "success",
+          title: "Post added succesfully!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       })
       .catch((err) => {
         alert(err);
@@ -42,7 +51,7 @@ const ModalAddPost = ({ show, setShow }) => {
       >
         <div className="flex items-center justify-between">
           <h1 className="font-semibold">Add Post</h1>
-          <button onClick={() => setShow(false)}>
+          <button onClick={handleClose}>
             <XIcon size={20} />
           </button>
         </div>
@@ -84,7 +93,7 @@ const ModalAddPost = ({ show, setShow }) => {
             className={
               "col-span-2 mt-4 hover:opacity-75 border-2 border-black px-3 rounded-full"
             }
-            type="submit"
+            type="button"
             onClick={handleAddPost}
           >
             Add

@@ -28,8 +28,9 @@ const PageNavigation = ({ currentPage, setCurrentPage, totalPages }) => {
             <CircleArrowLeft size={32} />
           </button>
 
-          {Array.from({ length: 5 }).map((_, idx) => (
+          {Array.from({ length: totalPages }).map((_, idx) => (
             <button
+              key={idx}
               onClick={() => setCurrentPage(idx + 1)}
               disabled={currentPage === idx + 1}
               className={`hover:opacity-75 border-2 border-black px-1 w-8 h-8 rounded-full`}
